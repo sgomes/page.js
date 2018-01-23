@@ -149,6 +149,7 @@ page('/default');
   - `dispatch` perform initial dispatch [__true__]
   - `hashbang` add `#!` before urls [__false__]
   - `decodeURLComponents` remove URL encoding from path components (query string, pathname, hash) [__true__]
+  - `window` provide a window to control (by default it will control the main window)
 
   If you wish to load serve initial content
   from the server you likely will want to
@@ -194,6 +195,18 @@ page.exit('/sidebar', function(ctx, next) {
 ### page.exit(callback)
 
 Equivalent to `page.exit('*', callback)`.
+
+### page.create([options])
+
+Create a new page instance with the given options. Options provided
+are the same as provided in `page([options])` above. Use this if you need
+to control multiple windows (like iframes or popups) in addition
+to the main window.
+
+```js
+var otherPage = page.create({ window: iframe.contentWindow });
+otherPage('/', main);
+```
 
 ### Context
 
@@ -527,7 +540,7 @@ Before calling `page.base()` use: `history.redirect([prefixType], [basepath])` -
   * An objective should be a chunk of code that is related but requires explanation.
   * Commits should be in the form of what-it-is: how-it-does-it and or why-it's-needed or what-it-is for trivial changes
   * Pull requests and commits should be a guide to the code.
-  
+
 ## Server configuration
 
   In order to load and update any URL managed by page.js, you need to configure your environment to point to your project's main file (index.html, for example) for each non-existent URL. Below you will find examples for most common server scenarios.
@@ -549,10 +562,10 @@ If using Apache, create (or add to) the `.htaccess` file in the root of your pub
 ```apache
 Options +FollowSymLinks
 RewriteEngine On
- 
+
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
- 
+
 RewriteRule ^.*$ ./index.html
 ```
 
