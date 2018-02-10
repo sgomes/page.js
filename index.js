@@ -113,6 +113,10 @@
   Page.prototype._getBase = function() {
     var base = this._base;
     if(!!base) return base;
+    var loc = hasWindow && this._window && ths._window.location;
+    return (hasWindow && this._hashbang && loc && loc.protocol === 'file:') ? loc.pathname : base;
+    var base = this._base;
+    if(!!base) return base;
     var loc = hasWindow && this._window.location;
     return (hasWindow && this._hashbang && loc.protocol === 'file:') ?
       loc.pathname : base;
@@ -771,7 +775,6 @@
   /**
    * Module exports.
    */
-
   var globalPage = createPage();
   module.exports = globalPage;
   page.default = globalPage;
